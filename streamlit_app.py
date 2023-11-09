@@ -1,21 +1,16 @@
 import streamlit as st
-import pandas as pd
-import numpy as np
+from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
-st.title('Сложнейшие задание')
+tokenizer = AutoTokenizer.from_pretrained("Helsinki-NLP/opus-mt-ru-en")
 
-df = pd.read_csv("data.csv", delimiter=',')
+model = AutoModelForSeq2SeqLM.from_pretrained("Helsinki-NLP/opus-mt-ru-en")
 
-sex = st.radio(label="Пол пассажиров", options=["Женщины", "Мужчины"])
+stringToTranslate = st.text_input("Введите ваш текст")
 
-st.write("Доля выживших пассажиров")
+if (st.button("Перевести")):
+    input_ids = tokenizer.encode(stringToTranslate, return_tensors="pt")
 
-countOfSurvivedWoman = df[(df.Sex == "female") & (df.Survived == 1)].shape[0]
-countOfSurvivedMan = df[(df.Sex == "male") & (df.Survived == 1)].shape[0]
+    outputs = model.generate(input_ids)
 
-if (sex == "Женщины"):
-    survivedWomanRatio = round(countOfSurvivedWoman / (countOfSurvivedWoman + countOfSurvivedMan) * 100, 2)
-    st.write(f"{survivedWomanRatio} %")
-else:
-    survivedManRatio = round(countOfSurvivedMan / (countOfSurvivedWoman + countOfSurvivedMan) * 100, 3)
-    st.write(f"{survivedManRatio} %")
+    decoded = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    st.write("Перевод: " + decoded)
