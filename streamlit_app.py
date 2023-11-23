@@ -1,11 +1,12 @@
 import streamlit as st
+import torch
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM
 
-@st.cache
+@st.cache(hash_funcs={torch.nn.parameter.Parameter: lambda _: None})
 def load_tokenizer():
     return AutoTokenizer.from_pretrained("Helsinki-NLP/opus-mt-ru-en")
 
-@st.cache
+@st.cache(hash_funcs={torch.nn.parameter.Parameter: lambda _: None})
 def load_model():
     return AutoModelForSeq2SeqLM.from_pretrained("Helsinki-NLP/opus-mt-ru-en")
 
