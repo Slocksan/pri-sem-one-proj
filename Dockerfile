@@ -2,7 +2,7 @@ FROM huggingface/transformers-gpu
 
 WORKDIR /app
 
-ENV LC_ALL en_US.UTF-8
+ENV LANG C.UTF-8
 
 COPY . .
 
