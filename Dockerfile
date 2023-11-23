@@ -2,6 +2,8 @@ FROM huggingface/transformers-gpu
 
 WORKDIR /app
 
+RUN apt update && apt -y install locales && locale-gen en_US.UTF-8
+
 COPY . .
 
 RUN pip install -r requirements.txt
