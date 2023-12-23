@@ -1,6 +1,8 @@
-FROM python:3.11.6-slim
+FROM huggingface/transformers-gpu
 
 WORKDIR /app
+
+ENV LANG C.UTF-8
 
 COPY . .
 
